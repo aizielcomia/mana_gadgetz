@@ -1,9 +1,14 @@
 <?php
 session_start();
-include('db.php'); // Database connection (make sure to set up the PDO connection in db.php)
+include('db.php'); 
 
 // Fetch the list of products
-$products = $db->query("SELECT * FROM products")->fetchAll(PDO::FETCH_ASSOC);
+if ($db) {
+    $products = $db->query("SELECT * FROM products")->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    die("Database connection error.");
+}
+
 
 // Handle form submission to add a product
 if (isset($_POST['add_product'])) {

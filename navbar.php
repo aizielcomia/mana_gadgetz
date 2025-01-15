@@ -1,128 +1,173 @@
 <?php
-$page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';  // Define current page
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
 ?>
-
 <style>
     /* General Styles */
     body {
         font-family: 'Arial', sans-serif;
-        background-color: #111;
-        color: #f5f5f5;
+        margin: 0;
+        background-color: #f9f9f9;
     }
 
+    /* Navbar Container */
     .navbar {
-        background-color: #222; /* Dark background */
-        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 30px;
+        background: linear-gradient(90deg, #6f42c1, #543d8a);
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
+    .navbar a {
+        text-decoration: none;
+        color: white;
+        transition: color 0.3s ease;
+    }
+
+    .navbar a:hover {
+        color: #ffd700;
+    }
+
+    /* Navbar Brand */
     .navbar-brand {
         display: flex;
         align-items: center;
-        color: #f5f5f5;
-        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: bold;
     }
 
     .navbar-brand img {
-        width: 40px;
-        height: auto;
+        width: 50px;
         margin-right: 10px;
-    }
-
-    .navbar-brand span {
-        font-size: 1.4rem;
-        font-weight: bold;
-        color: #f5f5f5;
     }
 
     /* Navbar Links */
     .navbar-nav {
-        list-style-type: none;
-        padding-left: 0;
-        margin-bottom: 0;
+        display: flex;
+        list-style: none;
+        gap: 20px;
     }
 
     .nav-item {
-        display: inline-block;
-        margin-left: 20px;
+        position: relative;
     }
 
-    .nav-link {
-        color: #f5f5f5;
-        font-size: 1.1rem;
-        padding: 8px 12px;
-        text-decoration: none;
-        transition: color 0.3s ease, background-color 0.3s ease;
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-        background-color: #6f42c1; /* Purple background on hover and active state */
-        color: #fff;
+    .nav-item .nav-link {
+        padding: 10px 15px;
         border-radius: 5px;
+        font-size: 1rem;
     }
 
-    /* Toggler button for mobile */
-    .navbar-toggler {
-        border: none;
-        background-color: transparent;
-    }
-
-    .navbar-toggler-icon {
-        background-color: #f5f5f5;
+    .nav-item .nav-link.active {
+        background-color: #ffd700;
+        color: #6f42c1;
     }
 
     /* Responsive Navbar */
+    .navbar-toggler {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: white;
+        cursor: pointer;
+    }
+
+    .navbar-collapse {
+        display: flex;
+    }
+
     @media (max-width: 768px) {
+        .navbar-collapse {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background: linear-gradient(90deg, #6f42c1, #543d8a);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-collapse.show {
+            display: flex;
+        }
+
         .navbar-nav {
-            text-align: center;
-            margin-top: 15px;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px 0;
         }
 
         .nav-item {
-            display: block;
-            margin-left: 0;
-            margin-bottom: 10px;
+            text-align: center;
         }
 
-        .navbar-toggler-icon {
-            font-size: 30px;
+        .navbar-toggler {
+            display: block;
         }
     }
 </style>
+<nav class="navbar">
+    <div class="navbar-brand">
+        <img src="contents/img/logo.jpg" alt="Logo">
+        MANA GADGETZ
+    </div>
+    <button class="navbar-toggler" onclick="toggleNavbar()">☰</button>
+    <div class="navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link <?= $page === 'iphone16' ? 'active' : '' ?>" href="index.php?page=iphone16">iPhone 16</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= $page === 'iphone15' ? 'active' : '' ?>" href="index.php?page=iphone15">iPhone 15</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= $page === 'iphone14' ? 'active' : '' ?>" href="index.php?page=iphone14">iPhone 14</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= $page === 'iphone13' ? 'active' : '' ?>" href="index.php?page=iphone13">iPhone 13</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= $page === 'iphone12' ? 'active' : '' ?>" href="index.php?page=iphone12">iPhone 12</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= $page === 'iphone11' ? 'active' : '' ?>" href="index.php?page=iphone11">iPhone 11</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= $page === 'cart' ? 'active' : '' ?>" href="index.php?page=cart">Cart</a>
+            </li>
 
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <a class="navbar-brand" href="index.php">
-            <img src="contents/img/logo.jpg" alt="Logo">
-            <span>MANA GADGETZ</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+           <!-- other items -->
+           <?php if (isset($_SESSION['user_id'])): ?>
                 <li class="nav-item">
-                    <a class="nav-link <?= $page === 'iphone16' ? 'active' : '' ?>" href="index.php?page=iphone16">iPhone 16</a>
+                    <a class="nav-link" href="index.php?page=profile">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?= $page === 'iphone15' ? 'active' : '' ?>" href="index.php?page=iphone15">iPhone 15</a>
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </li>
+            <?php else: ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?page=login">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?= $page === 'iphone14' ? 'active' : '' ?>" href="index.php?page=iphone14">iPhone 14</a>
+                    <a class="nav-link" href="index.php?page=signup">Signup</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link <?= $page === 'iphone13' ? 'active' : '' ?>" href="index.php?page=iphone13">iPhone 13</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?= $page === 'iphone12' ? 'active' : '' ?>" href="index.php?page=iphone12">iPhone 12</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?= $page === 'iphone11' ? 'active' : '' ?>" href="index.php?page=iphone11">iPhone 11</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?= $page === 'cart' ? 'active' : '' ?>" href="index.php?page=cart">CART</a>
-                </li>
-            </ul>
-        </div>
+            <?php endif; ?>
+        </ul>
     </div>
 </nav>
+<script>
+    function toggleNavbar() {
+        const navbar = document.getElementById('navbarNav');
+        navbar.classList.toggle('show');
+    }
+</script>
