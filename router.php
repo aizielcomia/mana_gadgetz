@@ -7,6 +7,7 @@ function route($page) {
         'iphone13' => 'contents/pages/iphone13.php',
         'iphone12' => 'contents/pages/iphone12.php',
         'iphone11' => 'contents/pages/iphone11.php',
+        'cart' => 'contents/pages/cart.php',
     ];
 
     if (array_key_exists($page, $pages)) {
