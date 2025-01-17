@@ -38,117 +38,167 @@ if (isset($_POST['add_to_cart'])) {
     $stmt->close();
 }
 ?>
+<style>
+    /* General Styles */
+    .iphone-con h1 {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 2.5rem;
+        color: #333;
+    }
+
+    p {
+        text-align: center;
+        font-size: 1rem;
+        color: #666;
+    }
+
+    /* Product Container */
+    /* Product Container */
+/* Product Container */
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 3 cards per row */
+    gap: 20px;
+    padding: 20px;
+    max-width: 100%; /* Allowing full width for responsiveness */
+    margin: 0 auto;
+}
 
 
+    /* Product Card */
+    .product-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
 
+    /* Product Image */
+    .product-card img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+    }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPhone12 Products</title>
-    <style>
-                /* General Styling */
-                body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
+    /* Product Details */
+    .product-details {
+        padding: 15px;
+    }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin: 20px 0;
-        }
+    .product-details h2 {
+        font-size: 1.5rem;
+        margin: 0 0 10px;
+        color: #333;
+        text-align: center;
+    }
 
-        .product-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-        }
+    .product-details p {
+        font-size: 1rem;
+        color: #666;
+        margin: 0 0 10px;
+    }
 
-        .product-card {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 300px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
+    .product-details .price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+    }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-        }
+    .product-details span {
+        font-size: 1.4rem;
+        color:rgb(0, 0, 0);
+        font-weight: bold;
+    }
 
-        .product-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
+    form {
+        display: flex;
+        gap: 70px;
+        align-items: center;
+    }
 
-        .product-details {
-            padding: 15px;
-        }
+    /* Quantity Form Styles */
+    .quantity-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
 
-        .product-details h2 {
-            font-size: 1.2rem;
-            margin: 0;
-            color: #333;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
+    .quantity-btn-add {
+        font-size: 1.2rem;
+        color: #fff;
+        background-color:rgb(36, 180, 77);
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-        .product-details p {
-            font-size: 0.9rem;
-            color: #555;
-            margin: 10px 0;
-            height: 40px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+    .quantity-btn-minus {
+        font-size: 1.2rem;
+        color: #fff;
+        background-color:rgb(228, 14, 14);
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-        .product-details span {
-            font-weight: bold;
-            font-size: 1.1rem;
-            color: #6f42c1;
-        }
+    .quantity-btn:hover {
+        background-color: #0056b3;
+    }
 
-        .add-to-cart {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background: #6f42c1;
-            color: #fff;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s ease;
-        }
+    form input[type="number"] {
+        width: 30px;
+        text-align: center;
+        padding: 5px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
 
-        .add-to-cart:hover {
-            background: #543d8a;
-        }
-    </style>
-</head>
-<body>
-    <h1>iPhone12 Products</h1>
-    <?php if (isset($_SESSION['message'])): ?>
-        <p><?= $_SESSION['message']; ?></p>
-        <?php unset($_SESSION['message']); ?>
-    <?php elseif (isset($_SESSION['error'])): ?>
-        <p><?= $_SESSION['error']; ?></p>
-        <?php unset($_SESSION['error']); ?>
+    .add_to_cart {
+        padding: 7px 15px;
+    }
+
+    form button {
+        font-size: 1rem;
+        color: #fff;
+        background:rgb(108, 17, 141);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    /* Styles for messages */
+    .message {
+        text-align: center;
+        font-size: 1rem;
+        color: #fff;
+        background-color: #28a745;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px auto;
+        max-width: 500px;
+        display: none;
+    }
+    .error {
+        background-color: #dc3545;
+    }
+</style>
+<div class="iphone-con">
+    <h1>iPhone 12 Products</h1>
+    <?php if (isset($_SESSION['message']) || isset($_SESSION['error'])): ?>
+        <div class="message <?= isset($_SESSION['error']) ? 'error' : '' ?>" id="flash-message">
+            <?= $_SESSION['message'] ?? $_SESSION['error']; ?>
+        </div>
+        <?php unset($_SESSION['message'], $_SESSION['error']); ?>
     <?php endif; ?>
 
     <div class="product-container">
@@ -159,13 +209,18 @@ if (isset($_POST['add_to_cart'])) {
                     <div class="product-details">
                         <h2><?= htmlspecialchars($product['name']) ?></h2>
                         <p><?= htmlspecialchars($product['description']) ?></p>
-                        <span>$<?= number_format($product['price'], 2) ?></span>
-                        <!-- Product Display Form -->
-                        <form method="POST">
-                            <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
-                            <input type="number" name="quantity" value="1" min="1" required>
-                            <button type="submit" name="add_to_cart">Add to Cart</button>
-                        </form>
+                        <div class="price-row">
+                            <span class="product-price">$<?= number_format($product['price'], 2) ?></span>
+                            <form method="POST" class="quantity-form">
+                                <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                <div class="quantity-container">
+                                    <button type="button" class="quantity-btn-minus" onclick="decrement(this)">-</button>
+                                    <input type="number" name="quantity" value="1" min="1" required>
+                                    <button type="button" class="quantity-btn-add" onclick="increment(this)">+</button>
+                                </div>
+                                <button type="submit" class="add_to_cart" name="add_to_cart">Add to Cart</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -173,5 +228,28 @@ if (isset($_POST['add_to_cart'])) {
             <p>No products available in this category.</p>
         <?php endif; ?>
     </div>
-</body>
-</html>
+    <script>
+        // Display the message and hide it after 3 seconds
+        const flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.style.display = 'block';
+            setTimeout(() => {
+                flashMessage.style.display = 'none';
+            }, 3500);
+        }
+
+        function increment(button) {
+            const input = button.previousElementSibling;
+            if (input) {
+                input.stepUp();
+            }
+        }
+
+        function decrement(button) {
+            const input = button.nextElementSibling;
+            if (input && input.value > 1) {
+                input.stepDown();
+            }
+        }
+    </script>
+</div>

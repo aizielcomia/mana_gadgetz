@@ -1,0 +1,12 @@
+    - Open the XAMPP.
+    - Click the Start button of Apache and MySQL.
+
+    - Click the Admin button right-next to the Stop button.
+
+    - On the left side, press New.
+    - Enter the database name: "mana_gadgetz", then click Create.
+    
+    - On the left-sidebar, Go to the database created which is the mana_gadgetz.
+    - At the top, Click Import then Choose File.
+    - Select the SQL file which is the (mana_gadgetz.sql) inside the !!!---THIS_IS_THE_DATABASE---!!! folder.
+    - Click Import.

@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MANA GADGETZ</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+    body {
+        font-family: 'Permanent Marker', sans-serif; /* Use the imported font */
+        background-color: linear-gradient(90deg, #f8f0f8, #d3c0f4);
+        margin: 0;
+        padding: 0;
+    }
+
+    .route-container {
+        height: 830px;
+    }
+</style>
 </head>
 <body>
 <?php
 include 'router.php';
-include 'navbar.php';
+include 'nav.php';
 
-// Get the current page from the query string
+if ($page !== 'login' && $page !== 'signup' && $page !== 'profile' && $page !== 'cart' && $page !== 'thanks') {
+    include 'carousel.html';
+}
+
 $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
 
-// // Only include the carousel if the current page is not login, signup, or profile
-// if ($page !== 'login' && $page !== 'signup' && $page !== 'profile') {
-//     include 'carousel.html';
-// }
+echo '<div class="route-container">';
+    route($page); 
+echo '</div>';
 
-route($page);
-
+include 'footer.html';
 ?>
 </body>
+
 </html>

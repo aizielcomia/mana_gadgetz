@@ -7,7 +7,6 @@ include('db.php');
 
 // Check if the user is logged in and if they are an admin
 if (!isset($_SESSION['user_email']) || $_SESSION['user_email'] != 'admin@managadgetz.com') {
-    // Redirect to index if the user is not logged in as an admin
     echo "<script>window.location.href = '../index.php';</script>";
     exit();
 }
@@ -81,8 +80,65 @@ if (isset($_POST['add_product'])) {
         }
     }
 }
-?>
 
+// Handle product update
+if (isset($_POST['update_product'])) {
+    $product_id = $_POST['product_id'];
+    $name = $conn->real_escape_string($_POST['name']);
+    $description = $conn->real_escape_string($_POST['description']);
+    $category = $conn->real_escape_string($_POST['category']);
+    $price = $conn->real_escape_string($_POST['price']);
+
+    // If a new image is uploaded
+    if (!empty($_FILES['image']['name'])) {
+        $image = $_FILES['image']['name'];
+        $target_dir_current = "uploads/";
+        $target_dir_parent = "../uploads/";
+
+        // Ensure directories exist
+        if (!file_exists($target_dir_current)) mkdir($target_dir_current, 0755, true);
+        if (!file_exists($target_dir_parent)) mkdir($target_dir_parent, 0755, true);
+
+        // Generate the full paths
+        $target_file_current = $target_dir_current . basename($image);
+        $target_file_parent = $target_dir_parent . basename($image);
+
+        // Validate image file
+        $file_type = strtolower(pathinfo($target_file_current, PATHINFO_EXTENSION));
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+        if (!in_array($file_type, $allowed_types)) {
+            $_SESSION['error'] = "Only image files (jpg, jpeg, png, gif) are allowed.";
+            exit();
+        }
+
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_current)) {
+            if (copy($target_file_current, $target_file_parent)) {
+                $relative_path = $target_file_current; // Use the new image
+            } else {
+                $_SESSION['error'] = "Failed to copy image to the parent directory.";
+                exit();
+            }
+        } else {
+            $_SESSION['error'] = "Failed to upload image.";
+            exit();
+        }
+    }
+
+    // Update the product details in the database
+    $stmt = $conn->prepare("UPDATE products SET image = ?, name = ?, description = ?, category = ?, price = ? WHERE id = ?");
+    $stmt->bind_param("ssssdi", $relative_path, $name, $description, $category, $price, $product_id);
+
+    if ($stmt->execute()) {
+        $_SESSION['success'] = "Product updated successfully.";
+        echo "<script>window.location.href = 'index.php';</script>";
+        exit();
+    } else {
+        $_SESSION['error'] = "Error updating product: " . $stmt->error;
+        echo "<script>window.location.href = 'index.php';</script>";
+        exit();
+    }
+}
+?>
 
 
 <!DOCTYPE html>
@@ -96,7 +152,6 @@ if (isset($_POST['add_product'])) {
     <style>
         /* General styles */
         body {
-            font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
             margin-top: 20px;
         }
@@ -196,28 +251,101 @@ if (isset($_POST['add_product'])) {
 
 <div class="container">
     <h1 class="text-center my-4">Product Management</h1>
-
-    <!-- Button to trigger modal for adding a product -->
+    <div class="d-flex justify-content-between align-items-center">
     <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addProductModal">Add Product</button>
+    <form action="logout.php" method="POST">
+        <button type="submit" style="background-color: red; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Logout</button>
+    </form>
+</div>
 
-    <!-- Product List -->
-    <div class="product-list mt-4">
-        <div class="row">
-            <?php foreach ($products as $product): ?>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="<?= $product['image'] ?>" class="card-img-top" alt="<?= $product['name'] ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= $product['name'] ?></h5>
-                            <p class="card-text"><?= $product['description'] ?></p>
-                            <p class="card-text"><?= $product['category'] ?> - $<?= number_format($product['price'], 2) ?></p>
+
+<div class="product-list mt-4">
+    <div class="row">
+        <?php foreach ($products as $product): ?>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="<?= $product['image'] ?>" class="card-img-top" alt="<?= $product['name'] ?>">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= $product['name'] ?></h5>
+                        <p class="card-text"><?= $product['description'] ?></p>
+                        <p class="card-text"><?= $product['category'] ?> - $<?= number_format($product['price'], 2) ?></p>
+                        
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <!-- Edit Button -->
+                            <button 
+                                class="btn btn-primary me-2" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editProductModal<?= $product['id'] ?>">
+                                Edit
+                            </button>
+                            
+                            <!-- Delete Button -->
+                            <form action="delete_product.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                <button type="submit" name="delete_product" class="btn btn-danger">Delete</button>
+                            </form>
                         </div>
                     </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
+            </div>
+
+            <!-- Modal for Editing Product -->
+            <div class="modal fade" id="editProductModal<?= $product['id'] ?>" tabindex="-1" aria-labelledby="editProductModalLabel<?= $product['id'] ?>" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editProductModalLabel<?= $product['id'] ?>">Edit Product</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                
+                                <div class="mb-3">
+                                    <label for="image<?= $product['id'] ?>" class="form-label">Product Image</label>
+                                    <input type="file" name="image" class="form-control" id="image<?= $product['id'] ?>">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="name<?= $product['id'] ?>" class="form-label">Product Name</label>
+                                    <input type="text" name="name" class="form-control" id="name<?= $product['id'] ?>" value="<?= $product['name'] ?>" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="description<?= $product['id'] ?>" class="form-label">Product Description</label>
+                                    <textarea name="description" class="form-control" id="description<?= $product['id'] ?>" rows="4" required><?= $product['description'] ?></textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="category<?= $product['id'] ?>" class="form-label">Select Category</label>
+                                    <select name="category" class="form-control" id="category<?= $product['id'] ?>" required>
+                                        <option value="iphone16" <?= $product['category'] === 'iphone16' ? 'selected' : '' ?>>iPhone 16</option>
+                                        <option value="iphone15" <?= $product['category'] === 'iphone15' ? 'selected' : '' ?>>iPhone 15</option>
+                                        <option value="iphone14" <?= $product['category'] === 'iphone14' ? 'selected' : '' ?>>iPhone 14</option>
+                                        <option value="iphone13" <?= $product['category'] === 'iphone13' ? 'selected' : '' ?>>iPhone 13</option>
+                                        <option value="iphone12" <?= $product['category'] === 'iphone12' ? 'selected' : '' ?>>iPhone 12</option>
+                                        <option value="iphone11" <?= $product['category'] === 'iphone11' ? 'selected' : '' ?>>iPhone 11</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="price<?= $product['id'] ?>" class="form-label">Price</label>
+                                    <input type="number" name="price" class="form-control" id="price<?= $product['id'] ?>" step="0.01" value="<?= $product['price'] ?>" required>
+                                </div>
+                                
+                                <button type="submit" name="update_product" class="btn btn-success w-100">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </div>
+
+</div>
+
 
 <!-- Modal for Adding Product -->
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">

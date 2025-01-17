@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:4306
--- Generation Time: Jan 17, 2025 at 08:00 AM
+-- Host: 127.0.0.1
+-- Generation Time: Jan 17, 2025 at 08:21 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -66,7 +66,9 @@ INSERT INTO `accounts` (`id`, `firstname`, `lastname`, `email`, `password`, `cre
 (27, 'Kups', 'Comia', 'kups@gmail.com', '$2y$10$wle/g4HGZ9f4JGacQNQsHO3eF3NIaiSoFRxM/P.byUOGe4rN1F/8q', '2025-01-17 06:02:42'),
 (28, 'admin', 'admin', 'admin@managadgetz.com', '$2y$10$zFAKoqobV.GPDwTxHw1NW..VSSIdFHh4fUn6tWqWs5bmQUuOHhlgK', '2025-01-17 06:43:56'),
 (29, 'tubol', 'kaba', 'tubol@gmail.com', '$2y$10$IYAtX6xdEf8nQDou2Br52uPoMY9WkuNbpa1hfYJjp3XAPFNGj3tJS', '2025-01-17 06:53:28'),
-(30, 'aiziel', 'comia', 'aas@gmail.com', '$2y$10$W6QNkZEhf3bdJ4NBgRNLG.G4S7V4pFVEewEFrLpkF54ec85iKIA0a', '2025-01-17 06:57:46');
+(30, 'aiziel', 'comia', 'aas@gmail.com', '$2y$10$W6QNkZEhf3bdJ4NBgRNLG.G4S7V4pFVEewEFrLpkF54ec85iKIA0a', '2025-01-17 06:57:46'),
+(31, 'Joy', 'Boy', 'ian@e.com', '$2y$10$J4ZgB04Vr3gOUpajWMoofeC1jY7bK8P77NS.jfuqqEuueNN.S0Ns2', '2025-01-17 13:34:47'),
+(32, 'Joy', 'Boy', 'l@example.com', '$2y$10$kn5WSFcnCUsijFL2aQZ1H.cPvcn3hlzj9Vmvx4VGRatKLS2/g.oka', '2025-01-17 16:27:08');
 
 -- --------------------------------------------------------
 
@@ -82,18 +84,6 @@ CREATE TABLE `cart` (
   `added_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`id`, `user_email`, `product_id`, `quantity`, `added_at`) VALUES
-(17, 'kups@gmail.com', 10, 1, '2025-01-17 06:09:19'),
-(18, 'kups@gmail.com', 10, 1, '2025-01-17 06:10:04'),
-(19, 'kups@gmail.com', 10, 1, '2025-01-17 06:11:51'),
-(20, 'kups@gmail.com', 10, 1, '2025-01-17 06:12:13'),
-(21, 'kups@gmail.com', 10, 1, '2025-01-17 06:12:55'),
-(22, 'kups@gmail.com', 10, 1, '2025-01-17 06:16:08');
-
 -- --------------------------------------------------------
 
 --
@@ -108,38 +98,6 @@ CREATE TABLE `checkouts` (
   `price` decimal(10,2) NOT NULL,
   `order_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `checkouts`
---
-
-INSERT INTO `checkouts` (`id`, `user_email`, `product_id`, `quantity`, `price`, `order_date`) VALUES
-(1, 'ay@gmail.com', 13, 1, 1200.00, '2025-01-17 06:01:17'),
-(2, 'kups@gmail.com', 14, 1, 1200.00, '2025-01-17 06:03:10'),
-(3, 'kups@gmail.com', 15, 1, 1200.00, '2025-01-17 06:06:09'),
-(4, 'kups@gmail.com', 16, 1, 1200.00, '2025-01-17 06:06:29'),
-(13, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:23:18'),
-(14, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:23:18'),
-(15, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:23:18'),
-(22, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:36:26'),
-(23, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:36:26'),
-(24, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:36:26'),
-(25, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:36:26'),
-(26, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:38:35'),
-(27, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:39:26'),
-(28, 'aizielrosas@gmail.com', 10, 1, 1200.00, '2025-01-17 06:39:26'),
-(29, 'aizielrosas@gmail.com', 16, 1, 1100.00, '2025-01-17 06:42:05'),
-(30, 'aizielrosas@gmail.com', 15, 1, 1050.00, '2025-01-17 06:42:05'),
-(31, 'aizielrosas@gmail.com', 14, 1, 800.00, '2025-01-17 06:42:05'),
-(32, 'aizielrosas@gmail.com', 13, 1, 650.00, '2025-01-17 06:42:05'),
-(33, 'aizielrosas@gmail.com', 12, 1, 500.00, '2025-01-17 06:42:05'),
-(34, 'tubol@gmail.com', 10, 1, 1200.00, '2025-01-17 06:54:40'),
-(35, 'tubol@gmail.com', 16, 1, 1100.00, '2025-01-17 06:54:40'),
-(36, 'tubol@gmail.com', 15, 1, 1050.00, '2025-01-17 06:54:40'),
-(37, 'tubol@gmail.com', 14, 1, 800.00, '2025-01-17 06:54:40'),
-(38, 'tubol@gmail.com', 13, 1, 650.00, '2025-01-17 06:54:40'),
-(39, 'tubol@gmail.com', 12, 1, 500.00, '2025-01-17 06:54:40'),
-(40, 'aas@gmail.com', 12, 1, 500.00, '2025-01-17 06:58:15');
 
 -- --------------------------------------------------------
 
@@ -161,12 +119,13 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `image`, `name`, `description`, `category`, `price`) VALUES
-(10, 'uploads/Pink iPhone 🩷.jpg', 'iPhone 16', 'Elevate your mobile experience: iPhone 16\\\'s sleek design, cutting-edge tech, and seamless usability.', 'iphone16', 1200.00),
-(12, 'uploads/[✔] unpredictable ; jaerosé.jpg', 'iPhone 11', 'Capture life\\\'s beauty with iPhone 11\\\'s pro-grade cameras, effortless usability, and cutting-edge tech.', 'iphone11', 500.00),
-(13, 'uploads/Oportunidade Única_ Leilão da Receita Federal Oferece iPhone 12 por R$ 1 Mil! Saiba Como Participar_.jpg', 'iPhone 12', 'Elevate your mobile experience: iPhone 12\\\'s stunning OLED display, dual cameras, and A14 Bionic chip.', 'iphone12', 650.00),
-(14, 'uploads/iPhone 14 pro Giveaway.jpg', 'iPhone 13', 'Experience seamless innovation: iPhone 13\\\'s efficient battery life, durable design and iOS elegance.', 'iphone13', 800.00),
-(15, 'uploads/Apple iPhone 14 (128 GB) - purple.jpg', 'iPhone 14', 'Capture life\\\'s moments: iPhone 14\\\'s enhanced Portrait mode, Night mode and cinematic video.', 'iphone14', 1050.00),
-(16, 'uploads/Apple iPhone 15 Plus 512GB - Pink, MU1J3ZP_A Mobile Phone Handsets.jpg', 'iPhone 15', 'Experience the future: iPhone 15\\\'s efficient battery, durable design and intuitive iOS.', 'iphone15', 1100.00);
+(25, 'uploads/[✔] unpredictable ; jaerosé.jpg', 'iPhone 11', '6.1\\\" Liquid Retina display, dual-camera, and A13 Bionic chip for a seamless experience.', 'iphone11', 400.00),
+(26, 'uploads/Oportunidade Única_ Leilão da Receita Federal Oferece iPhone 12 por R$ 1 Mil! Saiba Como Participar_.jpg', 'iPhone 12', '6.1\\\" Super Retina HD display, dual-camera, and A14 Bionic chip for a faster and more powerful experience.', 'iphone12', 500.00),
+(27, 'uploads/iPhone 14 pro Giveaway.jpg', 'iPhone 13', '6.1\\\" Super Retina HD display, advanced dual-camera, and A15 Bionic chip for a lightning-fast experience.', 'iphone13', 600.00),
+(28, 'uploads/Apple iPhone 14 (128 GB) - purple.jpg', 'iPhone 14', '6.1\\\" Super Retina XDR display, upgraded dual-camera, and A16 Bionic chip for a smoother and more powerful experience.', 'iphone14', 700.00),
+(29, 'uploads/Apple iPhone 15 Plus 512GB - Pink, MU1J3ZP_A Mobile Phone Handsets.jpg', 'iPhone 15', '6.1\\\" Super Retina XDR display, advanced quad-camera, and A17 Bionic chip for a faster and more immersive experience.', 'iphone15', 800.00),
+(30, 'uploads/Pink iPhone 🩷.jpg', 'iPhone 16', '6.1\\\" Super Retina XDR display, cutting-edge quad-camera, and A18 Bionic chip for unparalleled performance and innovation.', 'iphone16', 900.00),
+(33, 'uploads/iPhone 16 Pro Rose Pink ❤️ What are your thoughts….jpg', 'iPhone 16 Pro Max', '6.7\\\" Super Retina XDR display, revolutionary quad-camera, and A18 Bionic chip for exceptional power, speed, and photography capabilities.', 'iphone16', 1200.00);
 
 --
 -- Indexes for dumped tables
@@ -209,25 +168,25 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `checkouts`
 --
 ALTER TABLE `checkouts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- Constraints for dumped tables

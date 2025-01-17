@@ -24,9 +24,9 @@ if ($result->num_rows > 0) {
 <style>
 
   .con {
+        font-family: Arial, Helvetica, sans-serif;
       max-width: 800px;
       margin: 50px auto;
-      background-color: #f5f5f5;
       padding: 40px;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -39,8 +39,6 @@ if ($result->num_rows > 0) {
   }
 
   .profile-info {
-      background-color: #333;
-      color: #f5f5f5;
       padding: 20px;
       border-radius: 10px;
       margin-bottom: 20px;
@@ -79,7 +77,7 @@ if ($result->num_rows > 0) {
   }
 </style>
 <div class="con">
-  <h2>Welcome, <?= $firstname ?> <?= $lastname ?>!</h2>
+  <h2>Hi <?= $firstname ?> <?= $lastname ?>!</h2>
   <div class="profile-info">
       <h3>Profile Details</h3>
       <p><strong>Email:</strong> <?= $row['email'] ?></p>

@@ -54,9 +54,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <style>
   .con {
+    font-family: Arial, Helvetica, sans-serif;
       max-width: 400px;
       margin: auto;
-      background-color: #f5f5f5;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);

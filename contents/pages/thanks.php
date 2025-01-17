@@ -25,136 +25,118 @@ $result = $stmt->get_result();
 $order_items = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 ?>
+<style>
+    .thank-you-container {
+        max-width: 800px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    
+    .thank-you-container h1 {
+        font-size: 28px;
+        color: #4CAF50;
+        text-align: center;
+    }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You for Your Purchase</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .thank-you-container {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        
-        h1 {
-            font-size: 28px;
-            color: #4CAF50;
-            text-align: center;
-        }
+    .thank-you-container p {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        text-align: center;
+        margin-top: 20px;
+    }
 
-        p {
-            font-size: 16px;
-            text-align: center;
-            margin-top: 20px;
-        }
+    .order-summary {
+        margin-top: 30px;
+    }
 
-        .order-summary {
-            margin-top: 30px;
-        }
+    .order-summary h2 {
+        font-size: 22px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-        .order-summary h2 {
-            font-size: 22px;
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0 auto;
-        }
+    table th, table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
-        table th, table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    table th {
+        background-color: #f4f4f4;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
-        table th {
-            background-color: #f4f4f4;
-        }
+    .total-price {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 20px;
+    }
 
-        .total-price {
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 20px;
-        }
+    .back-to-home {
+        display: block;
+        width: 200px;
+        margin: 30px auto;
+        text-align: center;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
 
-        .back-to-home {
-            display: block;
-            width: 200px;
-            margin: 30px auto;
-            text-align: center;
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            text-decoration: none;
-        }
+    .back-to-home:hover {
+        background-color: #45a049;
+    }
+</style>
+<div class="thank-you-container">
+    <h1>Thank You for Your Purchase!</h1>
+    <p>Your order has been successfully placed. Here is a summary of your order:</p>
 
-        .back-to-home:hover {
-            background-color: #45a049;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="thank-you-container">
-        <h1>Thank You for Your Purchase!</h1>
-        <p>Your order has been successfully placed. Here is a summary of your order:</p>
-
-        <?php if (!empty($order_items)) : ?>
-            <div class="order-summary">
-                <h2>Order Summary</h2>
-                <table>
-                    <thead>
+    <?php if (!empty($order_items)) : ?>
+        <div class="order-summary">
+            <h2>Order History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $total_price = 0;
+                    foreach ($order_items as $item) :
+                        $item_total = $item['quantity'] * $item['price'];
+                        $total_price += $item_total;
+                    ?>
                         <tr>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total</th>
+                            <td><?= htmlspecialchars($item['name']) ?></td>
+                            <td><?= $item['quantity'] ?></td>
+                            <td>$<?= number_format($item['price'], 2) ?></td>
+                            <td>$<?= number_format($item_total, 2) ?></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $total_price = 0;
-                        foreach ($order_items as $item) :
-                            $item_total = $item['quantity'] * $item['price'];
-                            $total_price += $item_total;
-                        ?>
-                            <tr>
-                                <td><?= htmlspecialchars($item['name']) ?></td>
-                                <td><?= $item['quantity'] ?></td>
-                                <td>$<?= number_format($item['price'], 2) ?></td>
-                                <td>$<?= number_format($item_total, 2) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <p class="total-price"><strong>Total Price: $<?= number_format($total_price, 2) ?></strong></p>
-            </div>
-        <?php else: ?>
-            <p>Unfortunately, we couldn't find any order details. Please try again later.</p>
-        <?php endif; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <p class="total-price"><strong>Total Price: $<?= number_format($total_price, 2) ?></strong></p>
+        </div>
+    <?php else: ?>
+        <p>Unfortunately, we couldn't find any order details. Please try again later.</p>
+    <?php endif; ?>
 
-        <a href="index.php" class="back-to-home">Back to Home</a>
-    </div>
-
-</body>
-</html>
+    <a href="index.php" class="back-to-home">Back to Home</a>
+</div>

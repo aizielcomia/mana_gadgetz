@@ -5,14 +5,6 @@ if (session_status() === PHP_SESSION_NONE) {
 $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
 ?>
 <style>
-    /* General Styles */
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        background-color: #f9f9f9;
-    }
-
-    /* Navbar Container */
     .navbar {
         display: flex;
         align-items: center;
