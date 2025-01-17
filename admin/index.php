@@ -1,46 +1,89 @@
 <?php
-session_start();
-include('db.php'); 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Fetch the list of products
-if ($db) {
-    $products = $db->query("SELECT * FROM products")->fetchAll(PDO::FETCH_ASSOC);
+include('db.php');
+
+// Check if the user is logged in and if they are an admin
+if (!isset($_SESSION['user_email']) || $_SESSION['user_email'] != 'admin@managadgetz.com') {
+    // Redirect to index if the user is not logged in as an admin
+    echo "<script>window.location.href = '../index.php';</script>";
+    exit();
+}
+
+// Fetch the list of products if the user is an admin
+if ($conn) {
+    $products = [];
+    $result = $conn->query("SELECT * FROM products");
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $products[] = $row;
+        }
+    } else {
+        die("Error fetching products: " . $conn->error);
+    }
 } else {
     die("Database connection error.");
 }
 
-
 // Handle form submission to add a product
 if (isset($_POST['add_product'])) {
-    $name = $_POST['name'];
-    $description = $_POST['description'];
-    $category = $_POST['category'];
-    $price = $_POST['price'];
+    $name = $conn->real_escape_string($_POST['name']);
+    $description = $conn->real_escape_string($_POST['description']);
+    $category = $conn->real_escape_string($_POST['category']);
+    $price = $conn->real_escape_string($_POST['price']);
     $image = $_FILES['image']['name'];
 
     // Validate the form inputs
     if (empty($name) || empty($description) || empty($category) || empty($price) || empty($image)) {
         $_SESSION['error'] = "All fields are required!";
     } else {
-        // Handle file upload
-        $target_dir = "uploads/";
-        $target_file = $target_dir . basename($_FILES["image"]["name"]);
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-            // Insert new product into database
-            $stmt = $db->prepare("INSERT INTO products (image, name, description, category, price) VALUES (?, ?, ?, ?, ?)");
+        // Define the upload directories
+        $target_dir_current = "uploads/";      // Current folder
+        $target_dir_parent = "../uploads/";    // Parent folder
 
-            $stmt->execute([$target_file, $name, $description, $category, $price]);
+        // Generate the full paths for both locations
+        $target_file_current = $target_dir_current . basename($image);
+        $target_file_parent = $target_dir_parent . basename($image);
 
+        // Ensure both directories exist
+        if (!file_exists($target_dir_current)) {
+            mkdir($target_dir_current, 0755, true);
+        }
+        if (!file_exists($target_dir_parent)) {
+            mkdir($target_dir_parent, 0755, true);
+        }
 
-            // Redirect to refresh the page
-            header("Location: index.php");
-            exit();
+        // Attempt to move the uploaded file to both directories
+        $upload_current_success = move_uploaded_file($_FILES["image"]["tmp_name"], $target_file_current);
+        $upload_parent_success = copy($target_file_current, $target_file_parent);
+
+        if ($upload_current_success && $upload_parent_success) {
+            // Save the path from the current directory to the database
+            $relative_path = $target_file_current;
+
+            // Insert new product into the database
+            $stmt = $conn->prepare("INSERT INTO products (image, name, description, category, price) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssd", $relative_path, $name, $description, $category, $price);
+
+            if ($stmt->execute()) {
+                // Redirect to refresh the page
+                header("Location: index.php");
+                exit();
+            } else {
+                $_SESSION['error'] = "Error adding product: " . $stmt->error;
+            }
+
+            $stmt->close();
         } else {
-            $_SESSION['error'] = "Failed to upload image.";
+            $_SESSION['error'] = "Failed to upload image to both directories.";
         }
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">

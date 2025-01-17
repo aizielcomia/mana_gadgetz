@@ -1,8 +1,8 @@
 <?php
-include('db.php');
 if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
+    session_start();
+  }
+include('db.php');
 
 // Check if the user is logged in, otherwise redirect to login page
 if (!isset($_SESSION['user_id'])) {
@@ -22,13 +22,6 @@ if ($result->num_rows > 0) {
 }
 ?>
 <style>
-  body {
-      font-family: 'Arial', sans-serif;
-      background-color: #2e2e2e;
-      color: #f5f5f5;
-      margin: 0;
-      padding: 0;
-  }
 
   .con {
       max-width: 800px;

@@ -1,51 +1,58 @@
 <?php
-include('db.php');
 if (session_status() === PHP_SESSION_NONE) {
-  session_start();
+    session_start();
 }
+include('db.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // Get user input from the form
-  $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
-  $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
-  $email = mysqli_real_escape_string($conn, $_POST['email']);
-  $password = $_POST['password'];
-  $confirm_password = $_POST['confirm_password'];
+    // Get user input from the form
+    $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
+    $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
 
-  // Validate inputs
-  if (empty($firstname) || empty($lastname) || empty($email) || empty($password) || empty($confirm_password)) {
-      $error_message = "All fields are required!";
-  } elseif ($password !== $confirm_password) {
-      $error_message = "Passwords do not match!";
-  } else {
-      // Hash the password
-      $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    // Validate inputs
+    if (empty($firstname) || empty($lastname) || empty($email) || empty($password) || empty($confirm_password)) {
+        $error_message = "All fields are required!";
+    } elseif ($password !== $confirm_password) {
+        $error_message = "Passwords do not match!";
+    } else {
+        // Check if the email already exists
+        $sql_check_email = "SELECT * FROM accounts WHERE email = '$email'";
+        $result_check_email = $conn->query($sql_check_email);
 
-      // Insert data into the accounts table
-      $sql = "INSERT INTO accounts (firstname, lastname, email, password) VALUES ('$firstname', '$lastname', '$email', '$hashed_password')";
-      
-      if ($conn->query($sql) === TRUE) {
-          // Get the ID of the newly created user
-          $user_id = $conn->insert_id;
+        if ($result_check_email->num_rows > 0) {
+            $error_message = "An account with this email already exists!";
+        } else {
+            // Hash the password
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-          // Set session variables for auto-login
-          $_SESSION['user_id'] = $user_id;
-          $_SESSION['firstname'] = $firstname;
-          $_SESSION['lastname'] = $lastname;
-          $_SESSION['email'] = $email;
+            // Insert data into the accounts table
+            $sql = "INSERT INTO accounts (firstname, lastname, email, password) VALUES ('$firstname', '$lastname', '$email', '$hashed_password')";
+            
+            if ($conn->query($sql) === TRUE) {
+                // Get the ID of the newly created user
+                $user_id = $conn->insert_id;
 
-          echo "<script>window.location.href = 'index.php';</script>";
-          exit;
-      } else {
-          $error_message = "Error: " . $conn->error;
-      }
-  }
+                // Set session variables for auto-login
+                $_SESSION['user_id'] = $user_id;
+                $_SESSION['firstname'] = $firstname;
+                $_SESSION['lastname'] = $lastname;
+                $_SESSION['user_email'] = $email;  // Use user_email for consistency
+
+                // Redirect to index page after auto-login
+                echo "<script>window.location.href = 'index.php';</script>";
+                exit;
+            } else {
+                $error_message = "Error: " . $conn->error;
+            }
+        }
+    }
 }
 ?>
+
 <style>
-  body {
-      font-family: Arial, sans-serif;
-  }
   .con {
       max-width: 400px;
       margin: auto;

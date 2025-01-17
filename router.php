@@ -11,6 +11,7 @@ function route($page) {
         'profile' => 'contents/pages/profile.php',
         'login' => 'contents/pages/login.php',
         'signup' => 'contents/pages/signup.php',
+        'thanks' => 'contents/pages/thanks.php',
     ];
 
     if (array_key_exists($page, $pages)) {

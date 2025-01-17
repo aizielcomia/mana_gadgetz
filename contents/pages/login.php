@@ -1,7 +1,21 @@
 <?php
-include('db.php');
 if (session_status() === PHP_SESSION_NONE) {
-  session_start();
+    session_start();
+}
+
+include('db.php');
+
+// Check if the user is already logged in
+if (isset($_SESSION['user_id'])) {
+    // Redirect to the appropriate page based on the user role
+    if ($_SESSION['user_email'] == 'admin@managadgetz.com') {
+        // Redirect to admin page if the user is admin
+        echo "<script>window.location.href = 'admin/';</script>";
+    } else {
+        // Redirect to the main page for regular users
+        echo "<script>window.location.href = 'index.php';</script>";
+    }
+    exit();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -26,10 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['firstname'] = $row['firstname'];
                 $_SESSION['lastname'] = $row['lastname'];
+                $_SESSION['user_email'] = $row['email']; // Store user email in the session
 
-                // Redirect to the index page
-                echo "<script>window.location.href = 'index.php';</script>";
-                exit;
+                // Redirect based on the user role
+                if ($_SESSION['user_email'] == 'admin@managadgetz.com') {
+                    // Redirect to admin page if the email is admin
+                    echo "<script>window.location.href = 'admin/';</script>";
+                } else {
+                    // Redirect to the main page for other users
+                    echo "<script>window.location.href = 'index.php';</script>";
+                }
+                exit();
             } else {
                 $error_message = "Invalid password!";
             }
@@ -39,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 <style>
     body {
         font-family: Arial, sans-serif;
