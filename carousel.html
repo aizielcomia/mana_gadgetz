@@ -122,7 +122,6 @@
       <img src="contents/img/img6.jpg" alt="Image 6" />
     </div>
   </div>
-
   <!-- Navigation dots -->
   <div class="dots" role="navigation">
     <div class="dot active" data-index="0" aria-label="Slide 1"></div>
@@ -139,6 +138,7 @@
   const dots = document.querySelectorAll(".dot");
   const textElements = document.querySelectorAll(".carousel-text");
   const totalItems = dots.length;
+  const carouselContainer = document.querySelector(".carousel-container");
   let currentIndex = 0;
 
   // Function to move the carousel to the next item
@@ -193,8 +193,17 @@
     typeWriterEffect(initialTextElement, text);
   });
 
-  // Automatic transition every 7 seconds
-  setInterval(moveToNextItem, 6500);
+  // Play video on carousel click
+  carouselContainer.addEventListener("click", () => {
+    const videos = document.querySelectorAll(".carousel-video");
+    const activeVideo = videos[currentIndex];
+    if (activeVideo) {
+      activeVideo.play();
+    }
+  });
+
+  // Automatic transition every 6 seconds
+  setInterval(moveToNextItem, 6000);
 
   // Dot click functionality
   dots.forEach((dot) => {

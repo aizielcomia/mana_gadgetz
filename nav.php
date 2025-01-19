@@ -32,6 +32,10 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
         margin-right: 10px;
     }
 
+    .navbar-brand a {
+    text-decoration: none;
+}
+
     /* Navbar Links */
     .navbar-nav {
         display: flex;
@@ -139,7 +143,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
 <nav class="navbar" aria-label="Main Navigation">
     <div class="navbar-brand">
         <img src="contents/img/logo.jpg" alt="Logo">
-        MANA GADGETZ
+        <a href="index.php"> MANA GADGETZ</a>
     </div>
     <button class="navbar-toggler" aria-expanded="false" aria-controls="navbarNav" onclick="toggleNavbar()">
         ☰
