@@ -37,6 +37,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
         display: flex;
         list-style: none;
         gap: 20px;
+        flex: 1;
+        justify-content: center; /* Center align for iPhone models */
     }
 
     .nav-item .nav-link {
@@ -45,6 +47,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
         padding: 10px 15px;
         border-radius: 5px;
         transition: background-color 0.3s ease, color 0.3s ease;
+        font-size: 1rem; /* Default font size */
     }
 
     .nav-item .nav-link:hover,
@@ -53,7 +56,14 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
         color: #6f42c1;
     }
 
-    /* Responsive Styles */
+    /* User Links (Login/Signup/Profile/Logout) */
+    .navbar-user {
+        display: flex;
+        gap: 20px;
+        justify-content: flex-end; /* Align user links to the right */
+    }
+
+    /* Mobile View */
     .navbar-toggler {
         display: none;
         background: none;
@@ -66,6 +76,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
     .navbar-collapse {
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        width: 100%;
     }
 
     @media (max-width: 768px) {
@@ -78,7 +90,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
             top: 100%;
             left: 0;
             width: 100%;
-            padding: 10px 0;
+            padding: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -87,6 +99,30 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
             animation: slideDown 0.3s ease-in-out;
         }
 
+        .navbar-nav {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .navbar-user {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .nav-item .nav-link {
+            font-size: 1rem;
+            padding: 12px 20px;
+            width: 100%;
+        }
+
+        /* Hamburger Icon */
+        .navbar-toggler {
+            display: block;
+        }
+
+        /* Animation */
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -96,10 +132,6 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-
-        .navbar-toggler {
-            display: block;
         }
     }
 </style>
@@ -132,25 +164,27 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'iphone16';
             <li class="nav-item">
                 <a class="nav-link <?= $page === 'iphone11' ? 'active' : '' ?>" href="index.php?page=iphone11">iPhone 11</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link <?= $page === 'cart' ? 'active' : '' ?>" href="index.php?page=cart">Cart</a>
-            </li>
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=profile">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Logout</a>
-                </li>
-            <?php else: ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=signup">Signup</a>
-                </li>
-            <?php endif; ?>
         </ul>
+        <div class="navbar-user">
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <div class="nav-item">
+                    <a class="nav-link" href="index.php?page=cart">Cart</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="index.php?page=profile">Profile</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </div>
+            <?php else: ?>
+                <div class="nav-item">
+                    <a class="nav-link" href="index.php?page=login">Login</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="index.php?page=signup">Signup</a>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
 </nav>
 

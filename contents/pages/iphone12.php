@@ -40,121 +40,148 @@ if (isset($_POST['add_to_cart'])) {
 ?>
 <style>
     /* General Styles */
+    body {
+        background: linear-gradient(135deg, #1e1e2e, #282843);
+        color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
     .iphone-con h1 {
         text-align: center;
         margin-top: 20px;
-        font-size: 2.5rem;
-        color: #333;
+        font-size: 3rem;
+        color: #ff9f43;
+        text-shadow: 2px 2px 8px rgba(255, 159, 67, 0.7);
     }
 
-    p {
+    .iphone-con p {
+        font-family: Arial, Helvetica, sans-serif;
         text-align: center;
         font-size: 1rem;
-        color: #666;
+        color: #ccc;
     }
 
     /* Product Container */
-    /* Product Container */
-/* Product Container */
-.product-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 3 cards per row */
-    gap: 20px;
-    padding: 20px;
-    max-width: 100%; /* Allowing full width for responsiveness */
-    margin: 0 auto;
-}
+    .product-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .product-container {
+            grid-template-columns: 1fr;
+        }
+    }
 
     /* Product Card */
     .product-card {
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(145deg, #33334d, #232333);
+        border-radius: 12px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
         overflow: hidden;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
     }
 
     .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        transform: translateY(-8px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     }
 
     /* Product Image */
     .product-card img {
         width: 100%;
-        height: 400px;
+        height: 250px;
         object-fit: cover;
     }
 
     /* Product Details */
     .product-details {
         padding: 15px;
+        text-align: center;
     }
 
     .product-details h2 {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
+        color: #ff9f43;
         margin: 0 0 10px;
-        color: #333;
-        text-align: center;
+        text-shadow: 1px 1px 5px rgba(255, 159, 67, 0.5);
     }
 
     .product-details p {
         font-size: 1rem;
-        color: #666;
-        margin: 0 0 10px;
+        color: #aaa;
+        margin-bottom: 15px;
     }
 
-    .product-details .price-row {
+    .price-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 15px;
+        padding: 0 10px;
     }
 
-    .product-details span {
+    .product-price {
         font-size: 1.4rem;
-        color:rgb(0, 0, 0);
         font-weight: bold;
+        color: #74b9ff;
+        text-shadow: 1px 1px 5px rgba(116, 185, 255, 0.7);
     }
 
-    form {
+    .price-row span {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .price-row form {
         display: flex;
-        gap: 70px;
-        align-items: center;
+        gap: 10px;
+        justify-content: center;
     }
 
-    /* Quantity Form Styles */
+    /* Buttons */
+    .add_to_cart {
+        font-size: 1rem;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
     .quantity-container {
         display: flex;
         align-items: center;
         gap: 5px;
     }
 
-    .quantity-btn-add {
-        font-size: 1.2rem;
-        color: #fff;
-        background-color:rgb(36, 180, 77);
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
+    .quantity-btn-add,
     .quantity-btn-minus {
         font-size: 1.2rem;
         color: #fff;
-        background-color:rgb(228, 14, 14);
+        background-color: #6c5ce7;
         border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
 
-    .quantity-btn:hover {
-        background-color: #0056b3;
+    .quantity-btn-add:hover {
+        background-color: #4e42a8;
     }
 
-    form input[type="number"] {
-        width: 30px;
+    .quantity-btn-minus:hover {
+        background-color: #4e42a8;
+    }
+
+    .quantity-container input[type="number"] {
+        width: 50px; /* Adjust the width of the input field */
         text-align: center;
         padding: 5px;
         font-size: 1rem;
@@ -163,20 +190,22 @@ if (isset($_POST['add_to_cart'])) {
     }
 
     .add_to_cart {
-        padding: 7px 15px;
+        background-color: #6c5ce7;
     }
 
-    form button {
-        font-size: 1rem;
-        color: #fff;
-        background:rgb(108, 17, 141);
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.3s ease;
+    .quantity-btn-add:hover {
+        background-color: #01a89c;
     }
 
-    /* Styles for messages */
+    .quantity-btn-minus:hover {
+        background-color: #b52020;
+    }
+
+    .add_to_cart:hover {
+        background-color: #4e42a8;
+    }
+
+        /* Styles for messages */
     .message {
         text-align: center;
         font-size: 1rem;
@@ -192,16 +221,17 @@ if (isset($_POST['add_to_cart'])) {
         background-color: #dc3545;
     }
 </style>
+
 <div class="iphone-con">
-    <h1>iPhone 12 Products</h1>
+    <h1>iPhone 12 Phones</h1>
     <?php if (isset($_SESSION['message']) || isset($_SESSION['error'])): ?>
         <div class="message <?= isset($_SESSION['error']) ? 'error' : '' ?>" id="flash-message">
             <?= $_SESSION['message'] ?? $_SESSION['error']; ?>
         </div>
         <?php unset($_SESSION['message'], $_SESSION['error']); ?>
     <?php endif; ?>
-
     <div class="product-container">
+        <!-- Dynamic Product Cards -->
         <?php if (!empty($products)) : ?>
             <?php foreach ($products as $product) : ?>
                 <div class="product-card">
@@ -211,7 +241,7 @@ if (isset($_POST['add_to_cart'])) {
                         <p><?= htmlspecialchars($product['description']) ?></p>
                         <div class="price-row">
                             <span class="product-price">$<?= number_format($product['price'], 2) ?></span>
-                            <form method="POST" class="quantity-form">
+                            <form method="POST">
                                 <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                                 <div class="quantity-container">
                                     <button type="button" class="quantity-btn-minus" onclick="decrement(this)">-</button>
@@ -228,28 +258,28 @@ if (isset($_POST['add_to_cart'])) {
             <p>No products available in this category.</p>
         <?php endif; ?>
     </div>
-    <script>
-        // Display the message and hide it after 3 seconds
-        const flashMessage = document.getElementById('flash-message');
-        if (flashMessage) {
-            flashMessage.style.display = 'block';
-            setTimeout(() => {
-                flashMessage.style.display = 'none';
-            }, 3500);
-        }
-
-        function increment(button) {
-            const input = button.previousElementSibling;
-            if (input) {
-                input.stepUp();
-            }
-        }
-
-        function decrement(button) {
-            const input = button.nextElementSibling;
-            if (input && input.value > 1) {
-                input.stepDown();
-            }
-        }
-    </script>
 </div>
+<script>
+    // Display the message and hide it after 3 seconds
+    const flashMessage = document.getElementById('flash-message');
+    if (flashMessage) {
+        flashMessage.style.display = 'block';
+        setTimeout(() => {
+            flashMessage.style.display = 'none';
+        }, 3500);
+    }
+
+    function increment(button) {
+        const input = button.previousElementSibling;
+        if (input) {
+            input.stepUp();
+        }
+    }
+
+    function decrement(button) {
+        const input = button.nextElementSibling;
+        if (input && input.value > 1) {
+            input.stepDown();
+        }
+    }
+</script>

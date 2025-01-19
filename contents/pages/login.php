@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         border-radius: 10px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
-    h2 {
+    .con h2 {
         text-align: center;
         color: #333;
     }
@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<p class='error'>$error_message</p>";
     }
     ?>
-    <form method="POST" action="">
+    <form method="POST">
         <input type="email" name="email" class="input-field" placeholder="Email" required>
         <input type="password" name="password" class="input-field" placeholder="Password" required>
         <button type="submit" class="btn">Login</button>

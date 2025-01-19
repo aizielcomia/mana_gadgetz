@@ -7,15 +7,29 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
+    /* Apply imported font */
     body {
-        font-family: 'Permanent Marker', sans-serif; /* Use the imported font */
-        background-color: linear-gradient(90deg, #f8f0f8, #d3c0f4);
+        font-family: 'Permanent Marker', sans-serif;
         margin: 0;
         padding: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(90deg, #f8f0f8, #d3c0f4);
     }
 
     .route-container {
-        height: 830px;
+        flex: 1; /* Ensures this section takes up remaining space between header and footer */
+        padding: 20px;
+    }
+
+    footer {
+        background: #24243e;
+        color: #fff;
+        text-align: center;
+        padding: 15px 0;
+        border-top: 2px solid #444;
+        font-size: 1rem;
     }
 </style>
 </head>
@@ -37,5 +51,4 @@ echo '</div>';
 include 'footer.html';
 ?>
 </body>
-
 </html>

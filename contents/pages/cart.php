@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <style>
-    h1 {
+    .cart-con h1 {
         text-align: center;
         margin-top: 20px;
         color: #333;
@@ -194,59 +194,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         text-align: center;
     }
 </style>
-<h1>Shopping Cart</h1>
-
-<?php if (isset($_SESSION['error'])): ?>
-    <p class="error-message"><?= $_SESSION['error']; ?></p>
-    <?php unset($_SESSION['error']); ?>
-<?php endif; ?>
-
-<div class="cart-container">
-    <?php if (!empty($cart_items)) : ?>
-        <?php foreach ($cart_items as $item) : ?>
-            <div class="cart-item">
-                <img src="<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>">
-                <div class="cart-item-details">
-                    <h3><?= htmlspecialchars($item['name']) ?></h3>
-                    <p id="price-<?= $item['id'] ?>" class="price">Price: $<?= number_format($item['price'], 2) ?></p>
-                    <div class="cart-item-actions">
-                        <div class="quantity-container">
-                            <input type="number" class="quantity-input" id="quantity-<?= $item['id'] ?>" value="<?= $item['quantity'] ?>" min="1">
-                            <button type="button" class="increment-btn" onclick="incrementQuantity(<?= $item['id'] ?>)">+</button>
-                        </div>
-
-                        <!-- Remove Button -->
-                        <form action="contents/logic/remove_from_cart.php" method="POST" style="display: inline;">
-                            <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
-                            <button type="submit" class="remove-item">Remove</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-        <?php endforeach; ?>
-
-        <div class="cart-summary">
-            <h2>Order Summary</h2>
-            <p>Total Items: <?= count($cart_items) ?></p>
-            <p class="total-price">Total Price: $<?= number_format($total_price, 2) ?></p>
-            
-            <!-- Checkout Form -->
-            <form method="POST">
-                <input type="hidden" name="total_price" value="<?= $total_price ?>">
-                <input type="hidden" name="total_items" value="<?= count($cart_items) ?>">
-                
-                <button type="submit" class="checkout-btn">Proceed to Checkout</button>
-            </form>
-        </div>
-
-    <?php else: ?>
-        <div class="empty-cart">
-            <p>Your cart is empty. Start shopping now!</p>
-        </div>
+<div class="cart-con">
+    <h1>Shopping Cart</h1>
+    <?php if (isset($_SESSION['error'])): ?>
+        <p class="error-message"><?= $_SESSION['error']; ?></p>
+        <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
 
-    <script>
+    <div class="cart-container">
+        <?php if (!empty($cart_items)) : ?>
+            <?php foreach ($cart_items as $item) : ?>
+                <div class="cart-item">
+                    <img src="<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>">
+                    <div class="cart-item-details">
+                        <h3><?= htmlspecialchars($item['name']) ?></h3>
+                        <p id="price-<?= $item['id'] ?>" class="price">Price: $<?= number_format($item['price'], 2) ?></p>
+                        <div class="cart-item-actions">
+                            <div class="quantity-container">
+                                <input type="number" class="quantity-input" id="quantity-<?= $item['id'] ?>" value="<?= $item['quantity'] ?>" min="1">
+                                <button type="button" class="increment-btn" onclick="incrementQuantity(<?= $item['id'] ?>)">+</button>
+                            </div>
+
+                            <!-- Remove Button -->
+                            <form action="contents/logic/remove_from_cart.php" method="POST" style="display: inline;">
+                                <input type="hidden" name="cart_id" value="<?= $item['id'] ?>">
+                                <button type="submit" class="remove-item">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            <?php endforeach; ?>
+
+            <div class="cart-summary">
+                <h2>Order Summary</h2>
+                <p>Total Items: <?= count($cart_items) ?></p>
+                <p class="total-price">Total Price: $<?= number_format($total_price, 2) ?></p>
+                
+                <!-- Checkout Form -->
+                <form method="POST">
+                    <input type="hidden" name="total_price" value="<?= $total_price ?>">
+                    <input type="hidden" name="total_items" value="<?= count($cart_items) ?>">
+                    
+                    <button type="submit" class="checkout-btn">Proceed to Checkout</button>
+                </form>
+            </div>
+
+        <?php else: ?>
+            <div class="empty-cart">
+                <p>Your cart is empty. Start shopping now!</p>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<script>
 // Function to increment the quantity and update the price
 function incrementQuantity(cartId) {
     const quantityInput = document.getElementById('quantity-' + cartId);
@@ -289,20 +291,18 @@ function updateQuantity(cartId, quantity) {
     });
 }
 
-    // Function to update total price in the cart
-    function updateTotalPrice() {
-        let totalPrice = 0;
-        const items = document.querySelectorAll('.cart-item');
+// Function to update total price in the cart
+function updateTotalPrice() {
+    let totalPrice = 0;
+    const items = document.querySelectorAll('.cart-item');
 
-        items.forEach(item => {
-            const quantity = parseInt(item.querySelector('.quantity-input').value);
-            const price = parseFloat(item.querySelector('.cart-item-details .price').innerText.replace('$', '').replace(',', ''));
-            totalPrice += price * quantity;
-        });
+    items.forEach(item => {
+        const quantity = parseInt(item.querySelector('.quantity-input').value);
+        const price = parseFloat(item.querySelector('.cart-item-details .price').innerText.replace('$', '').replace(',', ''));
+        totalPrice += price * quantity;
+    });
 
-        // Update the total price on the page
-        document.querySelector('.total-price').innerText = '$' + totalPrice.toFixed(2);
-    }
+    // Update the total price on the page
+    document.querySelector('.total-price').innerText = '$' + totalPrice.toFixed(2);
+}
 </script>
-
-</div>
