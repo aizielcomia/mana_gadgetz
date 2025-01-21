@@ -77,7 +77,7 @@ if ($result->num_rows > 0) {
   }
 </style>
 <div class="con">
-  <h2>Hi <?= $firstname ?> <?= $lastname ?>!</h2>
+  <h2>Hello <?= $firstname ?> <?= $lastname ?>!</h2>
   <div class="profile-info">
       <h3>Profile Details</h3>
       <p><strong>Email:</strong> <?= $row['email'] ?></p>
